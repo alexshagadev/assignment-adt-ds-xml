@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XMLDATA>
+	<Submission SubmissionID="584962">
+	<Category CategoryName="Unclassified">>
+		<Driver FolderName="driver001">
+			<Language LanguageName="Basque">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+				<b>This is for the Spanish<i> Language that is </b> long ago lost.</i>
+			</Language>
+			<Language LanguageName="Brazilian">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+			</Language>
+			<Language LanguageName="Catalan">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+			</Language>
+			<Language LanguageName="Chinese-Simplified">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0">
+			</Language>
+			<Language LanguageName="Chinese-Traditional">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+				<b>This is for the tranditionally minded <i>Asian</I> person
+			</Language>
+			<Language LanguageName="Czech">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+			</Language>
+			<Language LanguageName="Danish">
+				<PackageCreationLocation FolderName="D:\Document\Product\PL2303\WHQL\Driver\V1.5.0.0"/>
+			</Language>
+		</Driver>
+	</Category>
+</Submission>
+</XMLDATA>
