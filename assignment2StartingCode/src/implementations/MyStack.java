@@ -56,13 +56,28 @@ public class MyStack<E> implements StackADT<E>, Serializable {
 
     @Override
     public Object[] toArray() {
-        return elements.toArray();
+        Object[] array = new Object[elements.size()];
+        for (int i = 0; i < elements.size(); i++) {
+            array[i] = elements.get(elements.size() - 1 - i);
+        }
+        return array;
     }
+
 
     @Override
     public E[] toArray(E[] holder) {
-        return elements.toArray(holder);
+        if (holder.length < elements.size()) {
+            holder = (E[]) java.lang.reflect.Array.newInstance(holder.getClass().getComponentType(), elements.size());
+        }
+        for (int i = 0; i < elements.size(); i++) {
+            holder[i] = elements.get(elements.size() - 1 - i);
+        }
+        if (holder.length > elements.size()) {
+            holder[elements.size()] = null; 
+        }
+        return holder;
     }
+
 
     @Override
     public boolean contains(E toFind) {
