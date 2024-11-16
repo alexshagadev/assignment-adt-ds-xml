@@ -2,7 +2,8 @@ package implementations;
 
 import utilities.StackADT;
 import utilities.Iterator;
-import utilities.MyArrayList;
+import implementations.MyArrayList;
+
 import java.io.Serializable;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
@@ -33,6 +34,7 @@ public class MyStack<E> implements StackADT<E>, Serializable {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
+        
         return elements.remove(elements.size() - 1);
     }
 
@@ -41,6 +43,7 @@ public class MyStack<E> implements StackADT<E>, Serializable {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
+        
         return elements.get(elements.size() - 1);
     }
 
@@ -57,9 +60,11 @@ public class MyStack<E> implements StackADT<E>, Serializable {
     @Override
     public Object[] toArray() {
         Object[] array = new Object[elements.size()];
+        
         for (int i = 0; i < elements.size(); i++) {
             array[i] = elements.get(elements.size() - 1 - i);
         }
+        
         return array;
     }
 
@@ -69,12 +74,15 @@ public class MyStack<E> implements StackADT<E>, Serializable {
         if (holder.length < elements.size()) {
             holder = (E[]) java.lang.reflect.Array.newInstance(holder.getClass().getComponentType(), elements.size());
         }
+        
         for (int i = 0; i < elements.size(); i++) {
             holder[i] = elements.get(elements.size() - 1 - i);
         }
+        
         if (holder.length > elements.size()) {
             holder[elements.size()] = null; 
         }
+        
         return holder;
     }
 
@@ -84,6 +92,7 @@ public class MyStack<E> implements StackADT<E>, Serializable {
         if (toFind == null) {
             throw new NullPointerException("Cannot search for null element");
         }
+        
         return elements.contains(toFind);
     }
 
@@ -92,11 +101,13 @@ public class MyStack<E> implements StackADT<E>, Serializable {
         if (toFind == null) {
             throw new NullPointerException("Cannot search for null element");
         }
+        
         for (int i = elements.size() - 1; i >= 0; i--) {
             if (elements.get(i).equals(toFind)) {
                 return elements.size() - i;
             }
         }
+        
         return -1;
     }
 
@@ -108,6 +119,7 @@ public class MyStack<E> implements StackADT<E>, Serializable {
     @Override
     public boolean equals(StackADT<E> that) {
         if (this == that) return true;
+        
         if (that == null || that.size() != this.size()) return false;
 
         Iterator<E> thisIterator = this.iterator();
@@ -115,9 +127,11 @@ public class MyStack<E> implements StackADT<E>, Serializable {
 
         while (thisIterator.hasNext() && thatIterator.hasNext()) {
             if (!thisIterator.next().equals(thatIterator.next())) {
-                return false;
+                
+            	return false;
             }
         }
+        
         return true;
     }
 
@@ -148,6 +162,7 @@ public class MyStack<E> implements StackADT<E>, Serializable {
             if (!hasNext()) {
                 throw new NoSuchElementException("No more elements");
             }
+            
             return elements.get(cursor--);
         }
     }
