@@ -21,14 +21,13 @@ public class parsereal {
     		System.out.println("Error reading file: " + e.getMessage());
     	}
     		
-        String[] lines = xmlContent.toString().split("\n");  // Split the XML content into lines
-        int lineNumber = 1; // Start at the first line
+        String[] lines = xmlContent.toString().split("\n");
+        int lineNumber = 1;
         for (String line : lines) {
-            // Trim the line to remove extra spaces
             String trimmedLine = line.trim();
             if (trimmedLine.isEmpty()) {
             	lineNumber++;
-                continue; // Skip empty lines
+                continue;
             }
 
             // Process the line
@@ -36,8 +35,6 @@ public class parsereal {
             lineNumber++;
 
         }
-
-        // After parsing, handle any remaining unclosed tags
         handleFinalErrors();
     }
 
@@ -50,7 +47,6 @@ public class parsereal {
             char currentChar = line.charAt(i);
 
             if (currentChar == '<') {
-                // Starting a new tag
                 insideTag = true;
                 currentTag.setLength(0);
             }
