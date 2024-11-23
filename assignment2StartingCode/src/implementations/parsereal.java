@@ -5,10 +5,11 @@ import java.util.Scanner;
 public class parsereal {
 
     private MyStack<String> tagStack = new MyStack<>();
-    private MyQueue<String> errorQueue = new MyQueue<>();
-    private MyQueue<String> extrasQueue = new MyQueue<>();
+    private MyQueue<String> errorQ = new MyQueue<>();
+    private MyQueue<String> extrasQ = new MyQueue<>();
 
     public void parse(String filePath) {
+    	//Using StringBuilder() and Scanner to get the XML Content
     	StringBuilder xmlContent  = new StringBuilder();
     	try {
     		Scanner xml = new Scanner(new File(filePath));
@@ -21,6 +22,7 @@ public class parsereal {
     		System.out.println("Error reading file: " + e.getMessage());
     	}
     		
+    	//Each line is put into an Array, then processed
         String[] lines = xmlContent.toString().split("\n");
         int lineNumber = 1;
         for (String line : lines) {
@@ -29,20 +31,19 @@ public class parsereal {
             	lineNumber++;
                 continue;
             }
-
-            // Process the line
             processLine(trimmedLine, lineNumber);
             lineNumber++;
-
         }
-        handleFinalErrors();
+        handleOtherErrors();
     }
 
     private void processLine(String line, int lineNumber) {
         int length = line.length();
         StringBuilder currentTag = new StringBuilder();
         boolean insideTag = false;
-
+        
+        //Each character is read, then put into a String called currentTag.
+        //currentTag is everything between < and >
         for (int i = 0; i < length; i++) {
             char currentChar = line.charAt(i);
 
@@ -59,6 +60,7 @@ public class parsereal {
                         String tagName = tagContent.substring(1).trim();
                         handleEndTag(tagName, lineNumber);
                     } else if (tagContent.endsWith("/")) {
+                    	//Self closing tab is ignored.
                     	continue;
                     } else {
                         String tagName = tagContent.split(" ")[0].trim();
@@ -72,21 +74,26 @@ public class parsereal {
     }
 
     private void handleEndTag(String tagName, int lineNumber) {
+    	//tagStack is checked and mismatches and mistakes are identified
         if (!tagStack.isEmpty() && tagStack.peek().equals(tagName)) {
             tagStack.pop();
-        } else if (!tagStack.isEmpty() && tagStack.contains(tagName)) {
+        }
+        else if (!tagStack.isEmpty() && tagStack.contains(tagName)) {
             handleMismatch(tagName, lineNumber);
-        } else if (tagStack.isEmpty()) {
-            errorQueue.enqueue("Line " + lineNumber + ": Error: Unmatched closing tag <" + tagName + ">");
-        } else {
-            extrasQueue.enqueue("Line " + lineNumber + ": Unmatched tag: <" + tagName + ">");
+        }
+        else if (tagStack.isEmpty()) {
+            errorQ.enqueue("Line " + lineNumber + ": Error: Unmatched closing tag <" + tagName + ">");
+        }
+        else {
+            extrasQ.enqueue("Line " + lineNumber + ": Unmatched tag: <" + tagName + ">");
         }
     }
 
     private void handleMismatch(String tagName, int lineNumber) {
+    	//the tagName is checked for a mismatch or the end tag is found for a previous tag.
         while (!tagStack.isEmpty() && !tagStack.peek().equals(tagName)) {
             String unmatchedTag = tagStack.pop();
-            errorQueue.enqueue("Error at line " + lineNumber + ":\nUnexpected tag <" + unmatchedTag);
+            errorQ.enqueue("Error at line " + lineNumber + ":\nUnexpected tag <" + unmatchedTag);
         }
         if (!tagStack.isEmpty()) {
             tagStack.pop();
@@ -94,28 +101,28 @@ public class parsereal {
         }
     }
 
-    private void handleFinalErrors() {
+    private void handleOtherErrors() {
         while (!tagStack.isEmpty()) {
             String unmatchedTag = tagStack.pop();
-            errorQueue.enqueue("Error: Unclosed tag <" + unmatchedTag + ">");
+            errorQ.enqueue("Error: Unclosed tag <" + unmatchedTag + ">");
         }
 
-        if (errorQueue.isEmpty() && !extrasQueue.isEmpty()) {
+        if (errorQ.isEmpty() && !extrasQ.isEmpty()) {
             System.out.println("Error: Extra unmatched tags in extras queue.");
-            while (!extrasQueue.isEmpty()) {
-                String tag = extrasQueue.dequeue();
+            while (!extrasQ.isEmpty()) {
+                String tag = extrasQ.dequeue();
                 System.out.println(tag);
             }
-        } else if (!errorQueue.isEmpty() && extrasQueue.isEmpty()) {
+        } else if (!errorQ.isEmpty() && extrasQ.isEmpty()) {
             System.out.println("Error: Missing matching tags.");
-            while (!errorQueue.isEmpty()) {
-                String tag = errorQueue.dequeue();
+            while (!errorQ.isEmpty()) {
+                String tag = errorQ.dequeue();
                 System.out.println(tag);
             }
         } else {
-            while (!errorQueue.isEmpty() && !extrasQueue.isEmpty()) {
-                String errorTag = errorQueue.dequeue();
-                String extraTag = extrasQueue.dequeue();
+            while (!errorQ.isEmpty() && !extrasQ.isEmpty()) {
+                String errorTag = errorQ.dequeue();
+                String extraTag = extrasQ.dequeue();
                 if (!errorTag.equals(extraTag)) {
                     System.out.println(errorTag + "> does not match " + extraTag);
                 }
@@ -124,6 +131,7 @@ public class parsereal {
     }
     
     public static void main(String[] args) {
+    	//the sample XML file paths are passed to the parser.
 
         String sample1Path = "./res/sample1.xml";
         String sample2Path = "./res/sample2.xml";
